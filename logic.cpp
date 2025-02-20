@@ -23,7 +23,6 @@ map<string,bool> &isColored){
 bool solve(
 int row,
 int n,
-map<string,vector<pair<int,int>>> &colorToCord,
 map<pair<int,int>,string> &cordToColor,
 map<string,bool> &isColored,
 vector<string> &board){
@@ -38,7 +37,7 @@ vector<string> &board){
             string colorOfCord=cordToColor[currpos];
             board[row][c]='X';
             isColored[colorOfCord]=true;
-            if(solve(row+1,n,colorToCord,cordToColor,isColored,board)) return true;
+            if(solve(row+1,n,cordToColor,isColored,board)) return true;
             isColored[colorOfCord]=false;
             board[row][c]='.';
         }
@@ -48,6 +47,7 @@ vector<string> &board){
 
 int main() {
     map<string,vector<pair<int,int>>> colorToCord;
+    // level : difficult-53
     colorToCord["blue"]={{2,5},{3,5}};
     colorToCord["grey"]={{3,1},{4,1}};
     colorToCord["brown"]={{0,0},{0,1},{0,2}};
@@ -76,7 +76,7 @@ int main() {
     string str(n,'.');
     for(int i=0;i<n;i++) board[i]=str;
 
-    bool isPossible = solve(0,n,colorToCord,cordToColor,isColored,board);
+    bool isPossible = solve(0,n,cordToColor,isColored,board);
     
     if(isPossible){
         for(auto i : board){
