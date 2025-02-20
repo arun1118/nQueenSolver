@@ -26,11 +26,9 @@ int n,
 map<string,vector<pair<int,int>>> &colorToCord,
 map<pair<int,int>,string> &cordToColor,
 map<string,bool> &isColored,
-vector<string> &board,
-vector<vector<string>> &ans){
+vector<string> &board){
 
     if(row==n){
-        ans.push_back(board);
         return true;
     }
 
@@ -40,7 +38,7 @@ vector<vector<string>> &ans){
             string colorOfCord=cordToColor[currpos];
             board[row][c]='X';
             isColored[colorOfCord]=true;
-            if(solve(row+1,n,colorToCord,cordToColor,isColored,board,ans)) return true;
+            if(solve(row+1,n,colorToCord,cordToColor,isColored,board)) return true;
             isColored[colorOfCord]=false;
             board[row][c]='.';
         }
@@ -74,20 +72,19 @@ int main() {
     
     int n=7;
 
-    vector<vector<string>> ans;
     vector<string> board(n);
     string str(n,'.');
     for(int i=0;i<n;i++) board[i]=str;
 
-    solve(0,n,colorToCord,cordToColor,isColored,board,ans);
-
-    vector<string> res;
-    if(ans.size()>0) res=ans[0];
-
-    for(auto i : res){
-        for(auto j : i) cout << j << " ";
-        cout << endl;
+    bool isPossible = solve(0,n,colorToCord,cordToColor,isColored,board);
+    
+    if(isPossible){
+        for(auto i : board){
+            for(auto j : i) cout << j << " ";
+            cout << endl;
+        }
     }
+    else cout << "not possible to place all queens" << endl;
 
     return 0;
 }
