@@ -1,9 +1,22 @@
-let allPossibleColors=["blue","grey","brown","pink","purple","yellow","green","red","orange","black"];
+let allPossibleColors=["blue","grey","brown","pink","purple","yellow","green","red","black"];
+
+
+let colorMapper={
+    "blue": "#003399",
+    "grey": "#737373",
+    "brown": "#802b00",
+    "pink": "#cc0052",
+    "purple": "#7a0099",
+    "yellow": "#b38f00",
+    "green": "#009900",
+    "red": "#b30000",
+    "black": "#000000"
+}
 
 let allColors=[];
 let cordToColor=new Map();
 let isColored=new Map();
-let gridSize=7;
+let gridSize=8;
 let board;
 const gridLayout=document.getElementById('grid');
 const colorContainerLayout=document.getElementById('color-container');
@@ -23,13 +36,15 @@ solveBtn.addEventListener('click',()=>{
 let markColorToCord = (row,col)=>{
     let currPos=[row,col]
     let btnId=`${row}_${col}`
+    let colorCode=colorMapper[currentColor]
     cordToColor.set(JSON.stringify(currPos),currentColor);
-    document.getElementById(btnId).style.backgroundColor=currentColor;
+    document.getElementById(btnId).style.backgroundColor=colorCode;
     if(cordToColor.size==49) solveBtn.disabled=false
 }
 
 let setCurrentColor = (currentColorName)=>{
-    currentColorBtn.style.backgroundColor=currentColorName
+    let colorCode=colorMapper[currentColorName]
+    currentColorBtn.style.backgroundColor=colorCode
     currentColor=currentColorName;
 }
 
@@ -55,15 +70,16 @@ let gridSetup = ()=>{
 
     for(let i=0;i<allPossibleColors.length;i++){
         let colorName=allPossibleColors[i]
+        let colorCode=colorMapper[colorName]
         let colorBtn=document.createElement('button');
         colorBtn.classList.add("color-btn");
         colorBtn.id=`${colorName}`;
-        colorBtn.style.backgroundColor=colorName;
+        colorBtn.style.backgroundColor=colorCode;
         colorBtn.onclick=()=>setCurrentColor(colorName);
         colorContainerLayout.appendChild(colorBtn);
     }
 
-    currentColorBtn.style.backgroundColor=allPossibleColors[0];
+    currentColorBtn.style.backgroundColor=colorMapper[allPossibleColors[0]];
 
 }
 
