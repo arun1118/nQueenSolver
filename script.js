@@ -3,6 +3,25 @@ let cordToColor=new Map();
 let isColored=new Map();
 let gridSize=7;
 let board=Array.from({length: gridSize},()=>Array(gridSize).fill('.'));
+const gridLayout = document.getElementById('grid');
+
+gridSetup = ()=>{
+    gridLayout.innerHTML='';
+    for(var i=0;i<gridSize;i++){
+        for(var j=0;j<gridSize;j++){
+            let gridBtn=document.createElement('button');
+            gridBtn.textContent=`${i},${j}`;
+            gridLayout.appendChild(gridBtn);
+        }
+  }
+}
+
+
+document.addEventListener("DOMContentLoaded",()=>{
+    gridSetup();
+})
+
+
 
 // level : difficult-53
 cordToColor.set(JSON.stringify([0,0]),"brown");
