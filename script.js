@@ -23,6 +23,8 @@ const colorContainerLayout=document.getElementById('color-container');
 const currentColorBtn=document.getElementById('currentColor');
 const resetBtn=document.getElementById('reset-btn')
 const solveBtn=document.getElementById('solve-btn')
+const crownImg = document.createElement('img');
+crownImg.src = 'crown.png'
 var currentColor=allPossibleColors[0]
 
 resetBtn.addEventListener('click',()=>{
@@ -106,7 +108,8 @@ let solveGrid = ()=>{
         for(let i=0;i<gridSize;i++){
             for(let j=0;j<gridSize;j++){
                 if(board[i][j]=='X'){
-                    document.getElementById(`${i}_${j}`).textContent='X';
+                    // document.getElementById(`${i}_${j}`).textContent='X';
+                    document.getElementById(`${i}_${j}`).innerHTML=`<img class="crown-img" src="crown.png">`
                 }
             }
         }
