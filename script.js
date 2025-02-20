@@ -1,9 +1,10 @@
 let allPossibleColors=["blue","grey","brown","pink","purple","yellow","green","red","orange","black"];
+
 let allColors=[];
 let cordToColor=new Map();
 let isColored=new Map();
 let gridSize=7;
-let board=Array.from({length: gridSize},()=>Array(gridSize).fill('.'));
+let board;
 const gridLayout=document.getElementById('grid');
 const colorContainerLayout=document.getElementById('color-container');
 const currentColorBtn=document.getElementById('currentColor');
@@ -15,12 +16,16 @@ resetBtn.addEventListener('click',()=>{
     window.location.reload();
 })
 
+solveBtn.addEventListener('click',()=>{
+    solveGrid();
+})
+
 let markColorToCord = (row,col)=>{
     let currPos=[row,col]
     let btnId=`${row}_${col}`
     cordToColor.set(JSON.stringify(currPos),currentColor);
     document.getElementById(btnId).style.backgroundColor=currentColor;
-    if(cordToColor.size==4) solveBtn.disabled=false
+    if(cordToColor.size==49) solveBtn.disabled=false
 }
 
 let setCurrentColor = (currentColorName)=>{
@@ -28,12 +33,15 @@ let setCurrentColor = (currentColorName)=>{
     currentColor=currentColorName;
 }
 
+let setUpBoard = ()=>{
+    board=Array.from({length: gridSize},()=>Array(gridSize).fill('.'));
+}
 
-
-gridSetup = ()=>{
+let gridSetup = ()=>{
     gridLayout.innerHTML='';
     colorContainerLayout.innerHTML=''
     solveBtn.disabled=true
+    setUpBoard();
     for(let i=0;i<gridSize;i++){
         for(let j=0;j<gridSize;j++){
             let gridBtn=document.createElement('button');
@@ -63,67 +71,36 @@ gridSetup = ()=>{
 gridSetup();
 
 
+let solveGrid = ()=>{
+    setUpBoard();
+    let allColorsSet = new Set();
+    for(let [k,v] of cordToColor){
+        allColorsSet.add(v);
+    }
 
-// level : difficult-53
-// cordToColor.set(JSON.stringify([0,0]),"brown");
-// cordToColor.set(JSON.stringify([0,1]),"brown");
-// cordToColor.set(JSON.stringify([0,2]),"brown");
-// cordToColor.set(JSON.stringify([0,3]),"green");
-// cordToColor.set(JSON.stringify([0,4]),"green");
-// cordToColor.set(JSON.stringify([0,5]),"green");
-// cordToColor.set(JSON.stringify([0,6]),"pink");
+    allColors=Array.from(allColorsSet);
 
-// cordToColor.set(JSON.stringify([1,0]),"green");
-// cordToColor.set(JSON.stringify([1,1]),"green");
-// cordToColor.set(JSON.stringify([1,2]),"green");
-// cordToColor.set(JSON.stringify([1,3]),"green");
-// cordToColor.set(JSON.stringify([1,4]),"green");
-// cordToColor.set(JSON.stringify([1,5]),"green");
-// cordToColor.set(JSON.stringify([1,6]),"pink");
+    for(let col of allColors){
+        isColored.set(col,false)
+    }
 
-// cordToColor.set(JSON.stringify([2,0]),"green");
-// cordToColor.set(JSON.stringify([2,1]),"green");
-// cordToColor.set(JSON.stringify([2,2]),"green");
-// cordToColor.set(JSON.stringify([2,3]),"green");
-// cordToColor.set(JSON.stringify([2,4]),"green");
-// cordToColor.set(JSON.stringify([2,5]),"blue");
-// cordToColor.set(JSON.stringify([2,6]),"pink");
+    let isPossible=solve(0,gridSize,cordToColor,isColored,board)
 
-// cordToColor.set(JSON.stringify([3,0]),"green");
-// cordToColor.set(JSON.stringify([3,1]),"grey");
-// cordToColor.set(JSON.stringify([3,2]),"green");
-// cordToColor.set(JSON.stringify([3,3]),"green");
-// cordToColor.set(JSON.stringify([3,4]),"yellow");
-// cordToColor.set(JSON.stringify([3,5]),"blue");
-// cordToColor.set(JSON.stringify([3,6]),"pink");
+    if(isPossible){
+        for(let i=0;i<gridSize;i++){
+            for(let j=0;j<gridSize;j++){
+                if(board[i][j]=='X'){
+                    document.getElementById(`${i}_${j}`).textContent='X';
+                }
+            }
+        }
+    }
+    else{
+        alert("not possbile to place all queens")
+    }
+}
 
-// cordToColor.set(JSON.stringify([4,0]),"green");
-// cordToColor.set(JSON.stringify([4,1]),"grey");
-// cordToColor.set(JSON.stringify([4,2]),"purple");
-// cordToColor.set(JSON.stringify([4,3]),"purple");
-// cordToColor.set(JSON.stringify([4,4]),"yellow");
-// cordToColor.set(JSON.stringify([4,5]),"pink");
-// cordToColor.set(JSON.stringify([4,6]),"pink");
-
-// cordToColor.set(JSON.stringify([5,0]),"green");
-// cordToColor.set(JSON.stringify([5,1]),"green");
-// cordToColor.set(JSON.stringify([5,2]),"purple");
-// cordToColor.set(JSON.stringify([5,3]),"purple");
-// cordToColor.set(JSON.stringify([5,4]),"yellow");
-// cordToColor.set(JSON.stringify([5,5]),"yellow");
-// cordToColor.set(JSON.stringify([5,6]),"yellow");
-
-// cordToColor.set(JSON.stringify([6,0]),"green");
-// cordToColor.set(JSON.stringify([6,1]),"green");
-// cordToColor.set(JSON.stringify([6,2]),"green");
-// cordToColor.set(JSON.stringify([6,3]),"purple");
-// cordToColor.set(JSON.stringify([6,4]),"yellow");
-// cordToColor.set(JSON.stringify([6,5]),"yellow");
-// cordToColor.set(JSON.stringify([6,6]),"yellow");
-
-
-
-isSafe = (row,col,gridSize,board,cordToColor,isColored)=>{
+let isSafe = (row,col,gridSize,board,cordToColor,isColored)=>{
     let currPos=[row,col]
     let colorOfCord=cordToColor.get(JSON.stringify(currPos))
 
@@ -140,7 +117,7 @@ isSafe = (row,col,gridSize,board,cordToColor,isColored)=>{
     return true;
 }
 
-solve = (row,gridSize,cordToColor,isColored,board)=>{
+let solve = (row,gridSize,cordToColor,isColored,board)=>{
     if(row==gridSize){
         return true;
     }
@@ -158,22 +135,4 @@ solve = (row,gridSize,cordToColor,isColored,board)=>{
     }
 
     return false;
-}
-
-
-for(let col of allColors){
-    isColored.set(col,false)
-}
-
-let isPossible=solve(0,gridSize,cordToColor,isColored,board)
-
-if(isPossible){
-    for(let i=0;i<gridSize;i++){
-        for(let j=0;j<gridSize;j++){
-            if(board[i][j]=='X') console.log(i+","+j)
-        }
-    }
-}
-else{
-    console.log("not possbile to place all queens")
 }
