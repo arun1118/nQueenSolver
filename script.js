@@ -7,15 +7,20 @@ let board=Array.from({length: gridSize},()=>Array(gridSize).fill('.'));
 const gridLayout=document.getElementById('grid');
 const colorContainerLayout=document.getElementById('color-container');
 const currentColorBtn=document.getElementById('currentColor');
+const resetBtn=document.getElementById('reset-btn')
+const solveBtn=document.getElementById('solve-btn')
 var currentColor=allPossibleColors[0]
 
-
+resetBtn.addEventListener('click',()=>{
+    window.location.reload();
+})
 
 let markColorToCord = (row,col)=>{
     let currPos=[row,col]
     let btnId=`${row}_${col}`
     cordToColor.set(JSON.stringify(currPos),currentColor);
     document.getElementById(btnId).style.backgroundColor=currentColor;
+    if(cordToColor.size==4) solveBtn.disabled=false
 }
 
 let setCurrentColor = (currentColorName)=>{
@@ -28,6 +33,7 @@ let setCurrentColor = (currentColorName)=>{
 gridSetup = ()=>{
     gridLayout.innerHTML='';
     colorContainerLayout.innerHTML=''
+    solveBtn.disabled=true
     for(let i=0;i<gridSize;i++){
         for(let j=0;j<gridSize;j++){
             let gridBtn=document.createElement('button');
