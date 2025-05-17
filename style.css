@@ -24,7 +24,7 @@
 
 #grid{
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     grid-gap: 5px;
     margin: 20px auto;
 }
@@ -50,12 +50,13 @@
     width: 8rem;
     height: 3rem;
     border: none;
-}
-
-#reset-btn,#solve-btn{
     color: whitesmoke;
     font-size: large;
     border-radius: 1rem;
+}
+
+#currentColor{
+  border-radius: 0rem;  
 }
 
 #reset-btn{
@@ -64,6 +65,10 @@
 
 #solve-btn{
     background-color: rgb(16, 130, 4);
+}
+
+#size-btn{
+    background-color: rgb(183, 1, 98);
 }
 
 .crown-img{

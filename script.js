@@ -16,13 +16,14 @@ let colorMapper={
 let allColors=[];
 let cordToColor=new Map();
 let isColored=new Map();
-let gridSize=8;
+let gridSize=7;
 let board;
 const gridLayout=document.getElementById('grid');
 const colorContainerLayout=document.getElementById('color-container');
 const currentColorBtn=document.getElementById('currentColor');
 const resetBtn=document.getElementById('reset-btn')
 const solveBtn=document.getElementById('solve-btn')
+const sizeBtn=document.getElementById('size-btn')
 const crownImg = document.createElement('img');
 crownImg.src = 'crown.png'
 var currentColor=allPossibleColors[0]
@@ -33,6 +34,14 @@ resetBtn.addEventListener('click',()=>{
 
 solveBtn.addEventListener('click',()=>{
     solveGrid();
+})
+
+sizeBtn.addEventListener('click',()=>{
+    if(gridSize===7) gridSize=8;
+    else gridSize=7;
+
+    gridSetup();
+    gridLayout.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
 })
 
 let markColorToCord = (row,col)=>{
